@@ -6,17 +6,18 @@ import (
 )
 
 func main() {
-	result1 := fetchApi()
-	result2 := fetchApi()
-	result3 := fetchApi()
+	resultch := make(chan string)
 
-	fmt.Printf("%v\n", result1)
-	fmt.Printf("%v\n", result2)
-	fmt.Printf("%v\n", result3)
+	go func() {
+		result := <-resultch
+		fmt.Println("%v\n", result)
+	}()
+
+	resultch <- "Foo"
 }
 
-func fetchApi() string {
+func fetchApi(n int) string {
 	time.Sleep(time.Second * 2)
 
-	return "Got it"
+	return fmt.Sprintf("result %d", n)
 }
